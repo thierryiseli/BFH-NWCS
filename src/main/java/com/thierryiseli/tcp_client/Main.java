@@ -3,10 +3,12 @@ package com.thierryiseli.tcp_client;
 public class Main {
     public static void main(String[] args) {
         String type = System.getenv("TCP_CLIENT_TYPE");
+        String serverHost = System.getenv("TCP_SERVER_HOST");
+        int serverPort = Integer.parseInt(System.getenv("TCP_SERVER_PORT"));
         switch (type) {
             case "MultithreadedSocketServer":
                 new MultithreadedSocketServer()
-                        .setSocketPort(1337)
+                        .setSocketPort(serverPort)
                         .and()
                         .serve()
                         .then()
@@ -14,7 +16,7 @@ public class Main {
                 break;
             case "MultithreadedClient":
                 new MultithreadedClient()
-                        .setHost("127.0.0.1", 1337)
+                        .setHost(serverHost, serverPort)
                         .and()
                         .connectToHost()
                         .then()
@@ -22,16 +24,15 @@ public class Main {
                 break;
             case "Server":
                 new Server()
-                        .setSocketPort(5000)
+                        .setSocketPort(serverPort)
                         .and()
                         .serve()
                         .then()
                         .listen();
                 break;
-            default:
             case "Client":
                 new Client()
-                        .setHost("127.0.0.1", 5000)
+                        .setHost(serverHost, serverPort)
                         .and()
                         .connectToHost()
                         .then()

@@ -11,7 +11,7 @@ class MultithreadedServerClientThread extends Thread {
         serverClient = inSocket;
         clientNo = counter;
     }
-    
+
     public void run() {
         try {
             DataInputStream inStream = new DataInputStream(serverClient.getInputStream());
