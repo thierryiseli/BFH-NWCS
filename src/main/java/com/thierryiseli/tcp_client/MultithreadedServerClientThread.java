@@ -2,8 +2,12 @@ package com.thierryiseli.tcp_client;
 
 import java.net.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class MultithreadedServerClientThread extends Thread {
+    private final static Logger LOGGER = Logger.getLogger(MultithreadedServerClientThread.class.getName());
+
     Socket serverClient;
     int clientNo;
 
@@ -30,8 +34,8 @@ class MultithreadedServerClientThread extends Thread {
             inStream.close();
             outStream.close();
             serverClient.close();
-        } catch (Exception ex) {
-            System.out.println(ex);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Running thread with tcp connection failed!", e);
         } finally {
             System.out.println("Client nr. " + clientNo + " exit!");
         }
