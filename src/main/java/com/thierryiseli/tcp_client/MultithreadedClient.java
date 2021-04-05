@@ -28,7 +28,7 @@ public class MultithreadedClient {
     }
 
     public MultithreadedClient listen() {
-        int amountOfRequests = 20;
+        int amountOfRequests = Integer.parseInt(System.getenv("TCP_AMOUNT_OF_REQUESTS"));
         try {
             DataInputStream inStream = new DataInputStream(socket.getInputStream());
             DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
