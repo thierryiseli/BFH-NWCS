@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 1.8
+      - name: Set up JDK 11
         uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -29,14 +29,29 @@ jobs:
         with:
           source: "target/thierryiseli-tcp-client-0.1.jar"
           target: "artifacts/thierryiseli-tcp-client-0.1.jar"
+      - name: Zip artifacts
+        uses: papeloto/action-zip@v1
+        with:
+          files: artifacts
+          dest: FinalJarAndBatchFiles.zip
       - name: Create Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
           body: |
             ${{ github.event.head_commit.message }}
           draft: false
           prerelease: false
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./FinalJarAndBatchFiles.zip
+          asset_name: FinalJarAndBatchFiles.zip
+          asset_content_type: application/zip
