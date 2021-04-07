@@ -6,7 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Server {
-    private final static Logger LOGGER = Logger.getLogger(MultithreadedSocketServer.class.getName());
+    private final static Logger LOGGER = Logger.getLogger(Server.class.getName());
 
     private int port;
     private ServerSocket serverSocket = null;
