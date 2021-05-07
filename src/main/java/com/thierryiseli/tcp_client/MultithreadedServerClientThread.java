@@ -2,6 +2,7 @@ package com.thierryiseli.tcp_client;
 
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,12 +19,20 @@ class MultithreadedServerClientThread extends Thread {
 
     public void run() {
         try {
+            String responseDelayInSecondsString = System.getenv("TCP_RESPONSE_DELAY_IN_SECONDS");
+
+            int responseDelayInSeconds = 0;
+            if (responseDelayInSecondsString != null && !responseDelayInSecondsString.isEmpty()) {
+                responseDelayInSeconds = Integer.parseInt(responseDelayInSecondsString);
+            }
+
             DataInputStream inStream = new DataInputStream(serverClient.getInputStream());
             DataOutputStream outStream = new DataOutputStream(serverClient.getOutputStream());
             String clientMessage = "";
             while (true) {
                 clientMessage = inStream.readUTF();
                 System.out.println("From Client nr. " + clientNo + ": " + clientMessage);
+                TimeUnit.SECONDS.sleep(responseDelayInSeconds);
                 if (clientMessage.equals("bye")) {
                     outStream.writeUTF("From Server to Client nr. " + clientNo + " thanks for talking to me. Bye!");
                     break;
