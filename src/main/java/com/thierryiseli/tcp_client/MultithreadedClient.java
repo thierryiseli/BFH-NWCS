@@ -2,6 +2,7 @@ package com.thierryiseli.tcp_client;
 
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +30,13 @@ public class MultithreadedClient {
 
     public MultithreadedClient listen() {
         int amountOfRequests = Integer.parseInt(System.getenv("TCP_AMOUNT_OF_REQUESTS"));
+        String delayInSecondsString = System.getenv("TCP_DELAY_IN_SECONDS");
+
+        int delayInSeconds = 0;
+        if (delayInSecondsString != null && !delayInSecondsString.isEmpty()) {
+            delayInSeconds = Integer.parseInt(delayInSecondsString);
+        }
+
         try {
             DataInputStream inStream = new DataInputStream(socket.getInputStream());
             DataOutputStream outStream = new DataOutputStream(socket.getOutputStream());
@@ -45,9 +53,10 @@ public class MultithreadedClient {
                     outStream.flush();
                     serverMessage = inStream.readUTF();
                     System.out.println(serverMessage);
+                    TimeUnit.SECONDS.sleep(delayInSeconds);
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             LOGGER.log(Level.SEVERE, "Listen to connection output failed!", e);
         }
         return this;
